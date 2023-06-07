@@ -1,0 +1,29 @@
+﻿img {
+    width: 200px;
+}
+
+button {
+    background-color: rebeccapurple;
+    padding: 7px;
+}
+h1 { 
+    display: inline-block;
+    font-size: 18px;
+}
+p {
+    display: inline-block;
+    border: 1px solid grey;
+    padding: 10px 60px;
+}
+div {
+    padding: 10px 60px;
+    width:35vw;
+    float:left;
+    height:30vh;
+    text-align:center;
+    line-height:100%;
+}
+
+img {
+    border: 1px solid grey;
+}

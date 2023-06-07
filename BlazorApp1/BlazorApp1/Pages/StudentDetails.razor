@@ -1,0 +1,93 @@
+﻿@page "/students/{ID:int}"
+@using BlazorApp1.Data;
+@inject StudentsService studentsService
+@inject NavigationManager navigationManager
+@inject IJSRuntime js
+
+<h3>StudentDetails</h3>
+@*<table class="table">
+    <thead>
+        <tr>
+            <th>Avatar</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Birthdate</th>
+            <th>Studies</th>
+        </tr>
+    </thead>
+    <tbody>
+            <tr>
+            @{
+                var student = Students.FirstOrDefault(s => s.ID == ID);
+            }
+            
+
+            @if (student != null)
+            {
+                <td><img src="@student.Avatar" alt="avatar" /></td>
+                <td>@student.FirstName</td>
+                <td>@student.LastName</td>
+                <td>@student.BirthDate</td>
+                <td>@student.Studies</td>
+            }
+            else
+            {
+                <td>Student not found</td>
+            }
+            
+            
+                <button @onclick="@(() => Return())">Return</button>
+            </tr>
+    </tbody>
+</table>*@
+ @{
+                var student = Students.FirstOrDefault(s => s.ID == ID);
+            }
+            
+
+            @if (student != null)
+            {
+<div>
+    <h1>Avatar:</h1>
+    <img src="@student.Avatar" alt="avatar" />
+</div>
+<div>
+    <h1>First Name:</h1> 
+    <p>@student.FirstName</p>
+</div>
+<div>
+    <h1>Last Name:</h1> 
+    <p>@student.LastName</p>
+</div>
+<div>
+    <h1>Birthdate:</h1>
+    <p>@student.BirthDate</p>
+</div>
+<div>
+    <h1>Studies:</h1>
+    <p>@student.Studies</p>
+    </div>
+}
+else
+{
+    <h2>STUDENT NOT FOUND!</h2>
+}
+<button @onclick="@(() => Return())">Return</button>
+
+@code {
+    
+    //Student stud = Students.
+    [Parameter]
+    public int ID { get; set; }
+    public List<Student> Students { get; set; } = new List<Student>();
+    public void Return()
+    {
+        navigationManager.NavigateTo("/students"); ///////////// to samo dac w return na details
+    }
+    protected override void OnInitialized()
+    {
+        Students = studentsService.Students;
+    }
+    
+
+}

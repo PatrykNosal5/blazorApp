@@ -1,0 +1,115 @@
+﻿@page "/students"
+@using BlazorApp1.Data;
+@inject StudentsService studentsService
+@inject NavigationManager navigationManager
+@inject IJSRuntime js
+<h3>StudentList</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Avatar</th>
+            <th @onclick="@(() => Sort())">First Name</th>
+            <th @onclick="@(() => Sort1())">Last Name</th>
+            <th @onclick="@(() => Sort2())">Birthdate</th>
+            <th @onclick="@(() => Sort3())">Studies</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var student in Students)
+        {
+            <tr>
+                <td><img src="@student.Avatar" alt="avatar" /></td>
+                <td>@student.FirstName</td>
+                <td>@student.LastName</td>
+                <td>@student.BirthDate</td>
+                <td>@student.Studies</td>
+                <td>
+                    <button @onclick ="@(() => ShowDetails(student.ID))">Details</button>
+                    <button @onclick="@(() => Delete(student.ID))">Delete</button>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@code {
+    public List<Student> Students { get; set; } = new List<Student>();
+    protected override void OnInitialized()
+    {
+        Students = studentsService.Students;
+    }
+
+    int counter1 = 0;
+    int counter2 = 0;
+    int counter3 = 0;
+    int counter = 0;
+    public void ShowDetails(int ID)
+    {
+        navigationManager.NavigateTo($"/students/{ID}"); ///////////// to samo dac w return na details
+    }
+
+    async Task Delete(int ID)
+    {
+
+        //await js.InvokeVoidAsync("alert", ID);// ze jeszcze boolean zwraca i usuwa
+        bool a = await js.InvokeAsync<bool>("confirm", "Are you sure you want to delete this student?");
+        if (a)
+        { 
+
+            Students.RemoveAll(student => student.ID == ID);
+
+        }
+    }
+
+    async Task  Sort()
+    {
+        if (counter == 0)
+        {
+            Students = Students.OrderBy(e => e.FirstName).ToList();
+            counter = 1;
+        }
+        else
+        {
+            counter = 0;
+            Students = Students.OrderByDescending(e => e.FirstName).ToList();
+        }
+    }
+    async Task Sort1()
+    {
+        if (counter1 == 0)
+        {
+            Students = Students.OrderBy(e => e.LastName).ToList();
+            counter1 = 1;
+        }
+        else
+        {
+            counter1 = 0;    
+            Students = Students.OrderByDescending(e => e.LastName).ToList();
+        }
+    }
+    async Task Sort2()
+    {
+        if (counter2 == 0)
+        {
+            Students = Students.OrderBy(e => e.BirthDate).ToList();
+            counter2 = 1;
+        }
+        else
+        {
+            counter2 = 0;
+            Students = Students.OrderByDescending(e => e.BirthDate).ToList();
+        }
+    }
+    async Task Sort3()
+    {
+        if (counter3 == 0)
+        {
+            Students = Students.OrderBy(e => e.Studies).ToList();
+            counter3 = 1;
+        }
+        else
+        {
+            counter3 = 0;
+            Students = Students.OrderByDescending(e => e.Studies).ToList();
+        }
+    }
+}
